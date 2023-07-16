@@ -30,12 +30,12 @@ model Product {
   name        String      @unique
   slug        String      @unique
   description String
-  price       String
+  price       Int
   images      String[]
   categoryId  Int?        @map("category_id")
   userId      Int?        @map("user_id")
   orderItems  OrderItem[]
-  Category    Category?   @relation(fields: [categoryId], references: [id])
+  category    Category?   @relation(fields: [categoryId], references: [id])
   reviews     Review[]
   User        User?       @relation(fields: [userId], references: [id])
 }
