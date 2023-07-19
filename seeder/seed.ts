@@ -15,16 +15,16 @@ const createProducts = async (quantity: number) => {
 		const product = await prisma.product.create({
 			data: {
 				name: productName,
-				slug: faker.helpers.slugify(productName),
+				slug: faker.helpers.slugify(productName).toLowerCase(),
 				description: faker.commerce.productDescription(),
 				price: +faker.commerce.price(100, 200, 0),
 				images: Array.from({
-					length: faker.datatype.number({ min: 0, max: 5 })
-				}).map(() => faker.image.imageUrl()),
+					length: faker.datatype.number({ min: 2, max: 6 })
+				}).map(() => faker.image.imageUrl(500, 500)),
 				category: {
 					create: {
 						name: categoryName,
-						slug: faker.helpers.slugify(categoryName)
+						slug: faker.helpers.slugify(categoryName).toLowerCase()
 					}
 				},
 				reviews: {

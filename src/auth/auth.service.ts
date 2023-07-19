@@ -86,11 +86,14 @@ export class AuthService {
 
 	private async validateUser(dto: LoginDto) {
 		const user = await this.prisma.user.findUnique({
-			where: { email: dto.email }
+			where: {
+				email: dto.email
+			}
 		})
-		if (!user) throw new NotFoundException('User already exists')
+		if (!user) throw new NotFoundException('User not found')
 
 		const isValid = await verify(user.password, dto.password)
+
 		if (!isValid) throw new UnauthorizedException('Invalid password')
 
 		return user
