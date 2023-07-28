@@ -18,7 +18,7 @@ import { CategoryDto } from './dto/category.dto'
 export class CategoryController {
 	constructor(private readonly categoryService: CategoryService) {}
 
-	@Get('by-slug/:slug')
+	@Get(':slug')
 	async getBySlug(@Param('slug') slug: string) {
 		return this.categoryService.bySlug(slug)
 	}

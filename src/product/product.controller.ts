@@ -23,11 +23,13 @@ export class ProductController {
 	@UsePipes(new ValidationPipe())
 	@Get()
 	async getAll(@Query() queryDto: GetAllProductsDto) {
+		
 		return this.productService.getAll(queryDto)
 	}
 
 	@Get('similar/:id')
 	async getSimilar(@Param('id') id: string) {
+		
 		return this.productService.getSimilar(+id)
 	}
 
@@ -38,7 +40,9 @@ export class ProductController {
 
 	@Get('by-category/:categorySlug')
 	async getProductByCategory(@Param('categorySlug') categorySlug: string) {
-		return this.productService.byCategory(categorySlug)
+		
+		
+		return this.productService.byCategory(categorySlug) 
 	}
 
 	@UsePipes(new ValidationPipe())

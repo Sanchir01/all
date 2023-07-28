@@ -34,4 +34,9 @@ export class RewievController {
 	) {
 		return this.rewievService.create(id, dto, +productId)
 	}
+
+	@Get('average-by-product/:productId')
+	async getAverageByProduct(@Param('productId') productId:number){
+		return this.rewievService.getAverageValueByProductId(+productId)
+	}
 }

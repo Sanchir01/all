@@ -5,7 +5,10 @@ import { PaginationService } from 'src/pagination/pagination.service'
 import { PrismaService } from 'src/prisma.service'
 import { EnumProductSort, GetAllProductsDto } from './dto/getAllProducts.dto'
 import { ProductDto } from './dto/product.dto'
-import { productReturnObjectFullest } from './return-product.object'
+import {
+	productReturnObject,
+	productReturnObjectFullest
+} from './return-product.object'
 
 @Injectable()
 export class ProductService {
@@ -35,26 +38,26 @@ export class ProductService {
 									contains: searchTerm,
 									mode: 'insensitive'
 								}
-							},
-						
+							}
 						},
-                  {name: { contains: searchTerm, mode: 'insensitive' }},
-                  {description: { contains: searchTerm, mode: 'insensitive' }}
+						{ name: { contains: searchTerm, mode: 'insensitive' } },
+						{ description: { contains: searchTerm, mode: 'insensitive' } }
 					]
 			  }
 			: {}
 
 		const { perPage, skip } = this.paginationService.getPagination(dto)
 
-		const product = await this.prisma.product.findMany({
+		const products = await this.prisma.product.findMany({
 			where: prismaSearchTermFilter,
 			orderBy: prismaSort,
 			skip,
-			take: perPage
+			take: perPage,
+			select: productReturnObject
 		})
 
 		return {
-			product,
+			products,
 			length: await this.prisma.product.count({ where: prismaSearchTermFilter })
 		}
 	}

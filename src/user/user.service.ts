@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import {
+	BadRequestException,
+	Injectable,
+	NotFoundException
+} from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { hash } from 'argon2'
 import { PrismaService } from 'src/prisma.service'
@@ -19,7 +23,13 @@ export class UserService {
 						name: true,
 						images: true,
 						slug: true,
-						price: true
+						price: true,
+						category: {
+							select: {
+								slug: true
+							}
+						},
+						reviews: true
 					}
 				},
 				...selectObject
@@ -28,7 +38,7 @@ export class UserService {
 		if (!user) {
 			throw new Error(`User not found`)
 		}
-		
+
 		return user
 	}
 
@@ -68,6 +78,6 @@ export class UserService {
 				}
 			}
 		})
-		return {message:"success"}
+		return { message: 'success' }
 	}
 }
