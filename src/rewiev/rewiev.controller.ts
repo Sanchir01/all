@@ -19,6 +19,7 @@ export class RewievController {
 
 	@UsePipes(new ValidationPipe())
 	@Get()
+	@Auth('admin')
 	async getAll() {
 		return this.rewievService.getAll()
 	}

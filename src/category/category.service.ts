@@ -3,6 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma.service'
 import { CategoryDto } from './dto/category.dto'
 import { returnCategoryObject } from './return-category.obj'
+import { createCategoryDto } from './dto/createCategory.dto'
 
 @Injectable()
 export class CategoryService {
@@ -54,11 +55,15 @@ export class CategoryService {
 		})
 	}
 
-	async create() {
+	async create(dto:createCategoryDto) {
+		const category = await this.prisma.category.findUnique({
+			where: { slug: dto.name.toLowerCase() }
+		})
+		if (category) throw new BadRequestException('такая категория есть')
 		return this.prisma.category.create({
 			data: {
-				name: '',
-				slug: ''
+				name: dto.name,
+				slug: dto.name.toLowerCase()
 			}
 		})
 	}

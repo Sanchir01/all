@@ -12,10 +12,11 @@ import { PrismaService } from 'src/prisma.service'
 import { AuthDto } from './dto/Auth.dto'
 import { LoginDto } from './dto/Login.dto'
 import { RefreshDto } from './dto/Refresh.dro'
+import { UserService } from 'src/user/user.service'
 
 @Injectable()
 export class AuthService {
-	constructor(private prisma: PrismaService, private jwt: JwtService) {}
+	constructor(private prisma: PrismaService, private jwt: JwtService, private userService: UserService) {}
 
 	async register(dto: AuthDto) {
 		const oldUser = await this.prisma.user.findUnique({
@@ -52,10 +53,9 @@ export class AuthService {
 		const result = await this.jwt.verify(dto.refreshToken)
 		if (!result) throw new UnauthorizedException('Невалидный токен')
 
-		const user = await this.prisma.user.findUnique({
-			where: { id: result.id }
+		const user = await this.userService.byId(result.id,{
+			isAdmin:true
 		})
-
 		const token = await this.issueTokens(user.id)
 		return {
 			...token,
@@ -77,10 +77,11 @@ export class AuthService {
 		return { accessToken, refreshToken }
 	}
 
-	private returnUserFields(user: User) {
+	private returnUserFields(user: Partial<User>) {
 		return {
 			id: user.id,
-			email: user.email
+			email: user.email,
+			isAdmin:user.isAdmin
 		}
 	}
 
